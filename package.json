@@ -1,0 +1,28 @@
+{
+    "name": "scrimstats-bot",
+    "version": "1.0.0",
+    "description": "Discord bot para estadísticas de scrims de Free Fire",
+    "main": "src/index.ts",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "deploy": "tsx src/deploy-commands.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@discordjs/rest": "^2.6.3",
+        "axios": "^1.19.0",
+        "discord-api-types": "^0.38.52",
+        "discord.js": "^14.27.0",
+        "dotenv": "^17.4.2"
+    },
+    "devDependencies": {
+        "@types/node": "^26.1.2",
+        "tsx": "^4.23.8",
+        "typescript": "^5.9.2"
+    }
+}

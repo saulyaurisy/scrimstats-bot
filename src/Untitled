@@ -1,0 +1,18 @@
+import { Client, GatewayIntentBits } from "discord.js";
+import dotenv from "dotenv";
+
+import { registerEvents } from "./handlers/EventHandler.js";
+
+dotenv.config();
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+  ],
+});
+
+registerEvents(client);
+
+client.login(process.env.DISCORD_TOKEN);
