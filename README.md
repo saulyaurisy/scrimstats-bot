@@ -79,6 +79,8 @@ Discord
    │
    ▼
 🏆 Training Results
+```
+
 This allows moderators to process matches faster and reduce manual work.
 
 ---
