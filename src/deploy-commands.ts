@@ -1,39 +1,48 @@
 import "dotenv/config";
 import { REST, Routes } from "discord.js";
+import { commands } from "./utils/CommandLoader.js";
 
-import ping from "./commands/ping.js";
-import trainingCreate from "./commands/training/create.js";
-import trainingEnd from "./commands/training/end.js";
+function getEnv(name: string): string {
+    const value = process.env[name];
 
-const commands = [
-  ping.data.toJSON(),
-  trainingCreate.data.toJSON(), 
-  trainingEnd.data.toJSON(),
-];
+    if (!value) {
+        throw new Error(`Missing environment variable: ${name}`);
+    }
 
-const rest = new REST({ version: "10" }).setToken(
-  process.env.DISCORD_TOKEN!
+    return value;
+}
+
+const token = getEnv("DISCORD_TOKEN");
+const clientId = getEnv("CLIENT_ID");
+
+const commandData = Array.from(commands.values()).map(
+    command => command.data.toJSON()
 );
 
-async function deploy() {
-  try {
-    console.log("🔄 Registrando comandos...");
+const rest = new REST({
+    version: "10"
+}).setToken(token);
 
-    await rest.put(
-      Routes.applicationGuildCommands(
-        process.env.CLIENT_ID!,
-        process.env.GUILD_ID!
-      ),
-      {
-        body: commands,
-      }
-    );
+async function deploy(): Promise<void> {
+    try {
+        console.log(`Comandos encontrados: ${commandData.length}`);
 
-    console.log("✅ Comandos registrados correctamente.");
-  } catch (error) {
-    console.error("❌ Error registrando comandos:");
-    console.error(error);
-  }
+        await rest.put(
+            Routes.applicationCommands(clientId),
+            {
+                body: commandData
+            }
+        );
+
+        console.log("Comandos globales registrados correctamente.");
+
+        for (const command of commandData) {
+            console.log(`/${command.name}`);
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 deploy();
